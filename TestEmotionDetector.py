@@ -7,12 +7,11 @@ from collections import Counter
 import pandas as pd  # For rolling average
 import matplotlib.dates as mdates
 from matplotlib.ticker import FuncFormatter
+import sys
 
+# Function to handle custom formatting of time
 def custom_date_formatter(x, pos=None):
-    # x is the number (in float) representing time
-    # Convert x back to datetime object
     dt = mdates.num2date(x)
-    # Format the datetime object with two decimal places for the milliseconds
     return dt.strftime('%H:%M:%S.') + str(int(dt.microsecond / 10000)).zfill(2)
 
 emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
@@ -28,18 +27,31 @@ emotion_to_value = {
     "Surprised": 2,
 }
 
-# Load json and create model
+# Load model
 json_file = open('model/emotion_model.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 emotion_model = model_from_json(loaded_model_json)
-
-# Load weights into new model
 emotion_model.load_weights("model/emotion_model.h5")
 print("Loaded model from disk")
 
-# Initialize video capture for camera (camera index 0 for default camera)
-cap = cv2.VideoCapture(0)
+# Check if the parameter is passed to select the mode
+if len(sys.argv) < 2:
+    print("Please provide a parameter: 'camera' or 'video'")
+    sys.exit()
+
+mode = sys.argv[1]
+
+if mode == 'camera':
+    cap = cv2.VideoCapture(0)  # Default camera
+    print("Using the camera for emotion detection.")
+elif mode == 'video' and len(sys.argv) == 3:
+    video_file = sys.argv[2]
+    cap = cv2.VideoCapture(video_file)
+    print(f"Using video file {video_file} for emotion detection.")
+else:
+    print("Invalid parameter. Use 'camera' or 'video <filename>'.")
+    sys.exit()
 
 # Collect emotions and their timestamps
 emotion_log = []
@@ -50,13 +62,13 @@ while True:
         print("Failed to capture frame. Exiting...")
         break
 
-    current_time = datetime.now()  # Record the current time
+    current_time = datetime.now()
     frame = cv2.resize(frame, (1280, 720))
 
     face_detector = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Detect faces in the frame
+    # Detect faces available in the frame
     num_faces = face_detector.detectMultiScale(gray_frame, scaleFactor=1.3, minNeighbors=5)
 
     # Process each detected face
@@ -76,7 +88,6 @@ while True:
         # Display the emotion on the video
         cv2.putText(frame, emotion, (x+5, y-20), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
-    # Show the video frame with emotion labels
     cv2.imshow('Emotion Detection', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -84,7 +95,7 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 
-# Process the collected data to create a graph
+# Process the collected data to create a graph (same as your previous code)
 if emotion_log:
     # Extract times and emotions
     times = [timestamp for _, timestamp in emotion_log]
