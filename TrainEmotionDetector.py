@@ -57,7 +57,7 @@ cv2.ocl.setUseOpenCL(False)
 
 emotion_model.compile(
     loss='categorical_crossentropy',
-    optimizer=Adam(learning_rate=0.0001),  # Use 'learning_rate' instead of 'lr'
+    optimizer=Adam(learning_rate=0.0001),
     metrics=['accuracy']
 )
 
