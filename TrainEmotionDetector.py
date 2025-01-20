@@ -36,7 +36,7 @@ emotion_model.add(
         32, # number of filters
         kernel_size=(3, 3), # Size of the filters. A 3 \times 3 filter moves across the image, processing 3x3 pixel regions at a time
         activation='relu', # The ReLU (Rectified Linear Unit) activation function introduces non-linearity and prevents negative activations, which helps the model learn complex patterns
-        input_shape=(48, 48, 1) # Specifies the shape of the input image. The first three dimensions represent the height, width, and number of channels in the image. The number of channels is 1 because the images are grayscale
+        input_shape=(48, 48, 1) #   
         )) 
 emotion_model.add(Conv2D(64, kernel_size=(3, 3), activation='relu')) # Same as layer before but it increases the number of features captured. As the network goes deeper, it can learn more complex and abstract patterns
 emotion_model.add(MaxPooling2D(pool_size=(2, 2))) # MaxPooling2D: Adds a 2D max pooling layer to downsample the feature maps. This reduces the spatial dimensions of the feature maps while retaining the most important information. It will go through the image in 2x2 blocks and keep the maximum value in each block
