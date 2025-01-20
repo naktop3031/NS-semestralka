@@ -1,7 +1,5 @@
-0. co za neuronku sme použili, jak to funguje, možno vylepšit neuronku
-1. vizualizace
-2. jak naložit s dátami
-3. porovnaní dát (napr. bez kofeínu a s kofeínem)
-4. conclusion
+1. upravit parametre trénovaní a vizualizovat dáta v CSV formatu
+2. Vymazat nejaké známky toho, že sme kód okopírovali
+3. dopsat notion dokument
 
 - mali by sme do dokumentu přidat proč sme trénovali neurónku zrovna na 300 epochách. Takže by to chcelo nejakú vizualizaci cost function a accuracy v závislosti na počtu epoch. Když to implementujeme tak by sme mali znova spustiť trénovanie a zistiť správny počet epoch?
