@@ -20,6 +20,7 @@ emotion_to_value = {
     "Surprised": 2,
 }
 
+
 # Load json and create model
 json_file = open('model/emotion_model.json', 'r')
 loaded_model_json = json_file.read()
@@ -30,25 +31,25 @@ emotion_model = model_from_json(loaded_model_json)
 emotion_model.load_weights("model/emotion_model.h5")
 print("Loaded model from disk")
 
-# Initialize video capture for camera (camera index 0 for default camera)
-cap = cv2.VideoCapture(0)
+# Initialize video capture
+cap = cv2.VideoCapture("selfVideo1.mp4")
 
 # Collect emotions and their timestamps
 emotion_log = []
+frame_rate = cap.get(cv2.CAP_PROP_FPS)
 
 while True:
     ret, frame = cap.read()
     if not ret:
-        print("Failed to capture frame. Exiting...")
         break
 
-    current_time = datetime.now()  # Record the current time
+    current_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.0  # Current time in seconds
     frame = cv2.resize(frame, (1280, 720))
 
     face_detector = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Detect faces in the frame
+    # Detect faces available in the frame
     num_faces = face_detector.detectMultiScale(gray_frame, scaleFactor=1.3, minNeighbors=5)
 
     # Process each detected face
@@ -68,7 +69,6 @@ while True:
         # Display the emotion on the video
         cv2.putText(frame, emotion, (x+5, y-20), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
 
-    # Show the video frame with emotion labels
     cv2.imshow('Emotion Detection', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
