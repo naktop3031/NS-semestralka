@@ -18,7 +18,7 @@ emotion_model.load_weights("model/emotion_model.h5")
 print("Loaded model from disk")
 
 # Initialize video capture
-cap = cv2.VideoCapture("videoBean.mp4")
+cap = cv2.VideoCapture("selfVideo.mp4")
 
 # Collect emotions and their timestamps
 emotion_log = []
