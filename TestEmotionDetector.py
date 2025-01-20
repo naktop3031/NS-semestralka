@@ -6,6 +6,14 @@ from datetime import datetime
 from collections import Counter
 import pandas as pd  # For rolling average
 import matplotlib.dates as mdates
+from matplotlib.ticker import FuncFormatter
+
+def custom_date_formatter(x, pos=None):
+    # x is the number (in float) representing time
+    # Convert x back to datetime object
+    dt = mdates.num2date(x)
+    # Format the datetime object with two decimal places for the milliseconds
+    return dt.strftime('%H:%M:%S.') + str(int(dt.microsecond / 10000)).zfill(2)
 
 emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
 
@@ -104,8 +112,8 @@ if emotion_log:
     # Plot the 5-second smoothed emotion line (red) with linewidth 1
     plt.plot(data["Time_Num"], data["Smoothed_Emotion_5"], linestyle='-', color='r', label="Smoothed Emotion (5s)", alpha=0.5, linewidth=1)
 
-    # Format the x-axis for readable datetime labels
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%H:%M:%S.%f"))  # Keep full milliseconds
+    # Apply the custom formatter to the x-axis
+    plt.gca().xaxis.set_major_formatter(FuncFormatter(custom_date_formatter))
     plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
 
     # Adjust x-axis labels to avoid overlap
