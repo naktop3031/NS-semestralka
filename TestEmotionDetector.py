@@ -32,7 +32,7 @@ json_file = open('model/emotion_model.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 emotion_model = model_from_json(loaded_model_json)
-emotion_model.load_weights("model/emotion_model.h5")
+emotion_model.load_weights("model/emotion_model.weights.h5")
 print("Loaded model from disk")
 
 # Check if the parameter is passed to select the mode
